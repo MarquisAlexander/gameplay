@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, FlatList } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { styles } from "./styles";
 
 import { Profile } from "../../components/Profile";
@@ -9,8 +10,12 @@ import { ListHeader } from "../../components/ListHeader";
 import { Appointment } from "../../components/Appointment";
 import { ListDivider } from "../../components/ListDivider";
 
+import { Background } from "../../components/Background";
+
 export function Home() {
   const [category, setCategory] = useState("");
+
+  const navigation = useNavigation();
 
   const appintments = [
     {
@@ -32,29 +37,41 @@ export function Home() {
     categoryId === category ? setCategory("") : setCategory(categoryId);
   }
 
+  function handleAppointmentDetails() {
+    navigation.navigate("AppointmentDetails");
+  }
+
+  function handleAppointmentCreate() {
+    navigation.navigate("AppointmentCreate");
+  }
+
   return (
-    <View>
-      <View style={styles.header}>
-        <Profile />
-        <ButtonAdd />
-      </View>
-      <CategorySelect
-        categorySelected={category}
-        setCategory={handleCategorySelect}
-      />
-
-      <View style={styles.content}>
-        <ListHeader title="Partidas agendadas" subtitle="Total 6" />
-
-        <FlatList
-          data={appintments}
-          keyExtractor={(item) => item.id}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => <ListDivider />}
-          style={styles.matches}
-          renderItem={({ item }) => <Appointment data={item} />}
+    <Background>
+      <View>
+        <View style={styles.header}>
+          <Profile />
+          <ButtonAdd onPress={handleAppointmentCreate} />
+        </View>
+        <CategorySelect
+          categorySelected={category}
+          setCategory={handleCategorySelect}
         />
+
+        <View style={styles.content}>
+          <ListHeader title="Partidas agendadas" subtitle="Total 6" />
+
+          <FlatList
+            data={appintments}
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+            ItemSeparatorComponent={() => <ListDivider />}
+            style={styles.matches}
+            renderItem={({ item }) => (
+              <Appointment data={item} onPress={handleAppointmentDetails} />
+            )}
+          />
+        </View>
       </View>
-    </View>
+    </Background>
   );
 }
