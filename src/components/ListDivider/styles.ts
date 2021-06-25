@@ -4,7 +4,7 @@ import { theme } from "../../global/styles/theme";
 
 export const styles = StyleSheet.create({
   container: {
-    width: "78%",
+    width: "75%",
     height: Inter_100Thin,
     backgroundColor: theme.colors.secondary40,
     marginTop: 2,
